@@ -1,0 +1,7 @@
+
+randomize food location
+  but don't place it on player
+
+have player grow when it eats the food
+
+maybe put in a time sync section (then the speed of the game could be modified dynamically)
