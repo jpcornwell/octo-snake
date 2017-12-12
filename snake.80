@@ -1,0 +1,72 @@
+
+:alias food-x    ve
+:alias food-y    vd
+:alias head-x    vc
+:alias head-y    vb
+:alias tail-x    va
+:alias tail-y    v9
+:alias direction v8
+
+:const UP    0
+:const LEFT  2
+:const DOWN  1
+:const RIGHT 3
+
+:const K_UP    5
+:const K_LEFT  7
+:const K_DOWN  8
+:const K_RIGHT 9
+
+: dot 0b1000000
+
+: place-player
+	head-x := 10
+	head-y := 10
+	tail-x := 10
+	tail-y := 10
+	direction := RIGHT
+	i := dot
+	sprite head-x head-y 1
+	return
+
+: place-food
+	food-x := 20
+	food-y := 20
+	i := dot
+	sprite food-x food-y 1
+	return
+
+: get-direction
+	v0 := K_UP
+	if v0 key then direction := UP
+	v0 := K_LEFT
+	if v0 key then direction := LEFT
+	v0 := K_DOWN
+	if v0 key then direction := DOWN
+	v0 := K_RIGHT
+	if v0 key then direction := RIGHT
+
+: move-player
+	# Move head
+	if direction == UP then head-y += -1
+	if direction == LEFT then head-x += -1
+	if direction == DOWN then head-y += 1
+	if direction == RIGHT then head-x += 1
+	i := dot
+	sprite head-x head-y 1
+
+	# Move tail
+	sprite tail-x tail-y 1
+	tail-x := head-x
+	tail-y := head-y
+	return
+
+: main
+	place-player
+	place-food
+	loop
+		get-direction
+		move-player
+	again
+
+
