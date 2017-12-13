@@ -5,6 +5,8 @@
 :alias tail-x    va
 :alias tail-y    v9
 :alias direction v8
+:alias head-idx  v7
+:alias tail-idx  v6
 
 :const UP    0
 :const LEFT  2
@@ -19,13 +21,26 @@
 : dot 0b1000000
 
 : place-player
-	head-x := 10
-	head-y := 10
-	tail-x := 10
-	tail-y := 10
+	head-idx := -1
+	tail-idx := 0
+	head-x := -1
+	head-y := 0
+	tail-x := 0
+	tail-y := 0
 	direction := RIGHT
-	i := dot
-	sprite head-x head-y 1
+
+	v1 := 3
+	loop
+		head-x += 1
+		i := dot
+		sprite head-x head-y 1
+		i := snake-body
+		i += head-idx
+		v0 := RIGHT
+		save v0
+		head-idx += 1
+		v1 += -1
+		if v1 != 0 then again
 	return
 
 : place-food
@@ -60,10 +75,27 @@
 	i := dot
 	sprite head-x head-y 1
 
+	# update body data
+	v0 := direction
+	i := snake-body
+	i += head-idx
+	save v0
+	head-idx += 1
+	if head-idx == 60 then head-idx := 0
+
 	# Move tail
+	i := dot
 	sprite tail-x tail-y 1
-	tail-x := head-x
-	tail-y := head-y
+	i := snake-body
+	i += tail-idx
+	load v0
+	tail-idx += 1
+	if tail-idx == 60 then tail-idx := 0
+	if v0 == UP then tail-y += -1
+	if v0 == LEFT then tail-x += -1
+	if v0 == DOWN then tail-y += 1
+	if v0 == RIGHT then tail-x += 1
+
 	return
 
 : main
@@ -83,3 +115,10 @@
 
 		move-player
 	again
+
+: snake-body
+	0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+	0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+	0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+	0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+: end-snake-body
