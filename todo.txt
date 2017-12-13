@@ -1,7 +1,4 @@
 
-randomize food location
-  but don't place it on player
-
 have player grow when it eats the food
 
 add score keeping (and speed up the game as the score increases)

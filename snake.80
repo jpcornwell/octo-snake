@@ -29,10 +29,15 @@
 	return
 
 : place-food
-	food-x := 20
-	food-y := 20
-	i := dot
-	sprite food-x food-y 1
+	loop
+		food-x := random 0b111111
+		food-y := random 0b11111
+		i := dot
+		sprite food-x food-y 1
+		if vf == 1 begin
+			sprite food-x food-y 1
+			again
+		end
 	return
 
 : get-direction
