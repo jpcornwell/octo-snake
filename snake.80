@@ -1,4 +1,3 @@
-
 :alias food-x    ve
 :alias food-y    vd
 :alias head-x    vc
@@ -45,6 +44,7 @@
 	if v0 key then direction := DOWN
 	v0 := K_RIGHT
 	if v0 key then direction := RIGHT
+	return
 
 : move-player
 	# Move head
@@ -65,8 +65,16 @@
 	place-player
 	place-food
 	loop
+		loop
 		get-direction
+
+		# time sync
+		vf := delay
+		if vf != 0 then again
+
+		# set clock speed
+		vf := 3
+		delay := vf
+
 		move-player
 	again
-
-

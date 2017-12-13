@@ -4,4 +4,4 @@ randomize food location
 
 have player grow when it eats the food
 
-maybe put in a time sync section (then the speed of the game could be modified dynamically)
+add score keeping (and speed up the game as the score increases)
