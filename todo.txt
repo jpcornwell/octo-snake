@@ -8,3 +8,9 @@ only allow the player to turn 90 degrees in one step
 give some sort of indication when game is lost (and provide restart option)
 
 add walls
+
+maybe write a retrospective on this (it has had some suprisingly difficult problems for such a simple game)
+  what makes a snake game fun?
+    right amount of space to maneuver in
+    removing dumb deaths (like pressing right when going left)
+  how do you receive input that stays in sync with the game speed while still feeling responsive
