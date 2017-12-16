@@ -1,8 +1,10 @@
 
 add score keeping (and speed up the game as the score increases)
 
-add better comments to code
+refactor
 
 only allow the player to turn 90 degrees in one step
 
-give some sort of indication when game is lost
+give some sort of indication when game is lost (and provide restart option)
+
+add walls
