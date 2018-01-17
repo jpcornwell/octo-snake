@@ -18,15 +18,48 @@
 :const K_DOWN  8
 :const K_RIGHT 9
 
+:const TOP_BOUNDARY 3
+:const LEFT_BOUNDARY 2
+:const BOTTOM_BOUNDARY 28
+:const RIGHT_BOUNDARY 32
+
 : dot 0b1000000
+
+: place-walls
+	i := dot
+	v0 := LEFT_BOUNDARY
+	v1 := TOP_BOUNDARY
+	sprite v0 v1 1
+	loop
+		v0 += 1
+		sprite v0 v1 1
+		if v0 != RIGHT_BOUNDARY then
+	again
+	loop
+		v1 += 1
+		sprite v0 v1 1
+		if v1 != BOTTOM_BOUNDARY then
+	again
+	loop
+		v0 += -1
+		sprite v0 v1 1
+		if v0 != LEFT_BOUNDARY then
+	again
+	loop
+		v1 += -1
+		sprite v0 v1 1
+		if v1 != TOP_BOUNDARY then
+	again
+
+	return
 
 : place-player
 	head-idx := -1
 	tail-idx := 0
-	head-x := -1
-	head-y := 0
-	tail-x := 0
-	tail-y := 0
+	head-x := 6
+	head-y := 15
+	tail-x := 7
+	tail-y := 15
 	direction := RIGHT
 
 	v1 := 3
@@ -45,7 +78,7 @@
 
 : place-food
 	loop
-		food-x := random 0b111111
+		food-x := random 0b11111
 		food-y := random 0b11111
 		i := dot
 		sprite food-x food-y 1
@@ -122,6 +155,7 @@
 	again
 
 : main
+	place-walls
 	place-player
 	place-food
 	loop
@@ -145,3 +179,4 @@
 	0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
 	0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
 : end-snake-body
+
