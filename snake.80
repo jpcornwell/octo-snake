@@ -8,6 +8,8 @@
 :alias head-idx  v7
 :alias tail-idx  v6
 
+:alias compare-temp v5
+
 :const UP    0
 :const LEFT  2
 :const DOWN  1
@@ -77,15 +79,30 @@
 	return
 
 : place-food
-	loop
-		food-x := random 0b11111
-		food-y := random 0b11111
-		i := dot
+	food-x := random 0b11111
+	food-y := random 0b11111
+	i := dot
+	sprite food-x food-y 1
+	if vf == 1 begin
 		sprite food-x food-y 1
-		if vf == 1 begin
-			sprite food-x food-y 1
-			again
-		end
+		jump place-food
+	end
+	if food-x <= LEFT_BOUNDARY begin
+		sprite food-x food-y 1
+		jump place-food
+	end
+	if food-x >= RIGHT_BOUNDARY begin
+		sprite food-x food-y 1
+		jump place-food
+	end
+	if food-y <= TOP_BOUNDARY begin
+		sprite food-x food-y 1
+		jump place-food
+	end
+	if food-y >= BOTTOM_BOUNDARY begin
+		sprite food-x food-y 1
+		jump place-food
+	end
 	return
 
 : get-direction
