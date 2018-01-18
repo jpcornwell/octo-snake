@@ -27,6 +27,38 @@
 
 : dot 0b1000000
 
+: letter_s 0xF0 0x80 0xF0 0x10 0xF0
+: letter_c 0xF0 0x80 0x80 0x80 0xF0
+: letter_o 0xF0 0x90 0x90 0x90 0xF0
+: letter_r 0xF0 0x90 0xF0 0xA0 0x90
+: letter_e 0xF0 0x80 0xF0 0x80 0xF0
+
+: place-score
+	v0 := 37
+	v1 := 6
+	i  := letter_s
+	sprite v0 v1 5
+	v0 += 5
+	i  := letter_c
+	sprite v0 v1 5
+	v0 += 5
+	i  := letter_o
+	sprite v0 v1 5
+	v0 += 5
+	i  := letter_r
+	sprite v0 v1 5
+	v0 += 5
+	i  := letter_e
+	sprite v0 v1 5
+
+	v0 := 0
+	i := hex v0
+	v0 := 52
+	v1 := 14
+	sprite v0 v1 5
+
+	return
+
 : place-walls
 	i := dot
 	v0 := LEFT_BOUNDARY
@@ -173,6 +205,7 @@
 
 : main
 	place-walls
+	place-score
 	place-player
 	place-food
 	loop
