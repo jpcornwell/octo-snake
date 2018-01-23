@@ -1,14 +1,15 @@
-:alias food-x    ve
-:alias food-y    vd
-:alias head-x    vc
-:alias head-y    vb
-:alias tail-x    va
-:alias tail-y    v9
-:alias direction v8
-:alias head-idx  v7
-:alias tail-idx  v6
+:alias food-x       ve
+:alias food-y       vd
+:alias head-x       vc
+:alias head-y       vb
+:alias tail-x       va
+:alias tail-y       v9
+:alias direction    v8
+:alias head-idx     v7
+:alias tail-idx     v6
+:alias is-game-over v5
 
-:alias compare-temp v5
+:alias compare-temp v4
 
 :const UP    0
 :const LEFT  2
@@ -270,14 +271,26 @@
 	return
 
 : game-over
+	is-game-over := 1
 	loop
+		v0 := key
+		if v0 != 13 then
 	again
+	clear
 
-: main
+: setup-game
+	is-game-over := 0
+	v0 := 0
+	i := score
+	save v0
 	place-walls
 	place-score
 	place-player
 	place-food
+	return
+
+: main
+	setup-game
 	loop
 		loop
 		get-direction
@@ -291,6 +304,7 @@
 		delay := vf
 
 		move-player
+		if is-game-over == 1 then jump main
 	again
 
 : snake-body
