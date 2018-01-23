@@ -38,6 +38,12 @@
 
 : digits 0 0 0
 
+# up, left, down, right
+# 0 = inactive
+# 1 = just pressed
+# 2 = held down
+: key-state 0 0 0 0
+
 : place-score
 	v0 := 37
 	v1 := 6
@@ -208,14 +214,111 @@
 	return
 
 : get-direction
-	v0 := K_UP
-	if v0 key then direction := UP
-	v0 := K_LEFT
-	if v0 key then direction := LEFT
-	v0 := K_DOWN
-	if v0 key then direction := DOWN
-	v0 := K_RIGHT
-	if v0 key then direction := RIGHT
+	# v0 = up
+	# v1 = left
+	# v2 = down
+	# v3 = right
+
+	i := key-state
+	load v3
+
+	# check for key held
+	if v0 == 1 begin
+		v4 := K_UP
+		if v4 key then v0 := 2
+	end
+	if v1 == 1 begin
+		v4 := K_LEFT
+		if v4 key then v1 := 2
+	end
+	if v2 == 1 begin
+		v4 := K_DOWN
+		if v4 key then v2 := 2
+	end
+	if v3 == 1 begin
+		v4 := K_RIGHT
+		if v4 key then v3 := 2
+	end
+	
+	# check for key press
+	if v0 == 0 begin
+		v4 := K_UP
+		if v4 key then v0 := 1
+	end
+	if v1 == 0 begin
+		v4 := K_LEFT
+		if v4 key then v1 := 1
+	end
+	if v2 == 0 begin
+		v4 := K_DOWN
+		if v4 key then v2 := 1
+	end
+	if v3 == 0 begin
+		v4 := K_RIGHT
+		if v4 key then v3 := 1
+	end
+
+	# check for key release
+	if v0 == 2 begin
+		v4 := K_UP
+		if v4 -key then v0 := 0
+	end
+	if v1 == 2 begin
+		v4 := K_LEFT
+		if v4 -key then v1 := 0
+	end
+	if v2 == 2 begin
+		v4 := K_DOWN
+		if v4 -key then v2 := 0
+	end
+	if v3 == 2 begin
+		v4 := K_RIGHT
+		if v4 -key then v3 := 0
+	end
+
+	i := key-state
+	save v3
+
+	if direction == DOWN begin
+		if v1 == 1 begin
+			direction := LEFT
+			return
+		end
+		if v3 == 1 begin
+			direction := RIGHT
+			return
+		end
+	end
+	if direction == RIGHT begin
+		if v0 == 1 begin
+			direction := UP
+			return
+		end
+		if v2 == 1 begin
+			direction := DOWN
+			return
+		end
+	end
+	if direction == UP begin
+		if v1 == 1 begin
+			direction := LEFT
+			return
+		end
+		if v3 == 1 begin
+			direction := RIGHT
+			return
+		end
+	end
+	if direction == LEFT begin
+		if v0 == 1 begin
+			direction := UP
+			return
+		end
+		if v2 == 1 begin
+			direction := DOWN
+			return
+		end
+	end
 	return
 
 : move-player
@@ -283,6 +386,12 @@
 	v0 := 0
 	i := score
 	save v0
+	v0 := 0
+	v1 := 0
+	v2 := 0
+	v3 := 0
+	i := key-state
+	save v3
 	place-walls
 	place-score
 	place-player
@@ -293,7 +402,6 @@
 	setup-game
 	loop
 		loop
-		get-direction
 
 		# time sync
 		vf := delay
@@ -303,6 +411,7 @@
 		vf := 3
 		delay := vf
 
+		get-direction
 		move-player
 		if is-game-over == 1 then jump main
 	again
