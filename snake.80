@@ -222,22 +222,22 @@
 	i := key-state
 	load v3
 
-	# check for key held
+	# check if key is held or released
 	if v0 == 1 begin
 		v4 := K_UP
-		if v4 key then v0 := 2
+		if v4 key begin v0 := 2 else v0 := 0 end
 	end
 	if v1 == 1 begin
 		v4 := K_LEFT
-		if v4 key then v1 := 2
+		if v4 key begin v1 := 2 else v1 := 0 end
 	end
 	if v2 == 1 begin
 		v4 := K_DOWN
-		if v4 key then v2 := 2
+		if v4 key begin v2 := 2 else v2 := 0 end
 	end
 	if v3 == 1 begin
 		v4 := K_RIGHT
-		if v4 key then v3 := 2
+		if v4 key begin v3 := 2 else v3 := 0 end
 	end
 	
 	# check for key press
