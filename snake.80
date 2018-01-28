@@ -33,6 +33,9 @@
 : letter_o 0xF0 0x90 0x90 0x90 0xF0
 : letter_r 0xF0 0x90 0xF0 0xA0 0x90
 : letter_e 0xF0 0x80 0xF0 0x80 0xF0
+: letter_n 0x90 0xD0 0xB0 0x90 0x90
+: letter_a 0xF0 0x90 0xF0 0x90 0x90
+: letter_k 0x90 0xA0 0xC0 0xA0 0x90
 
 : score 0
 
@@ -380,6 +383,32 @@
 		if v0 != 13 then
 	again
 	clear
+	return
+
+: start-screen
+	v0 := 20
+	v1 := 6
+	i  := letter_s
+	sprite v0 v1 5
+	v0 += 5
+	i  := letter_n
+	sprite v0 v1 5
+	v0 += 5
+	i  := letter_a
+	sprite v0 v1 5
+	v0 += 5
+	i  := letter_k
+	sprite v0 v1 5
+	v0 += 5
+	i  := letter_e
+	sprite v0 v1 5
+
+	loop
+		v0 := key
+		if v0 != 8 then
+	again
+	clear
+	return
 
 : setup-game
 	is-game-over := 0
@@ -398,7 +427,7 @@
 	place-food
 	return
 
-: main
+: play-game
 	setup-game
 	loop
 		loop
@@ -413,8 +442,12 @@
 
 		get-direction
 		move-player
-		if is-game-over == 1 then jump main
+		if is-game-over == 1 then jump play-game
 	again
+
+: main
+	start-screen
+	play-game
 
 : snake-body
 	0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
