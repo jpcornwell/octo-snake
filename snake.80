@@ -368,6 +368,8 @@
 				sprite head-x head-y 1
 				place-food
 				increment-score
+			else
+				game-over
 			end
 		else
 			game-over
