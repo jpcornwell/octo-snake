@@ -16,156 +16,162 @@
 :const DOWN  1
 :const RIGHT 3
 
-:const K_UP    5
-:const K_LEFT  7
-:const K_DOWN  8
-:const K_RIGHT 9
+:const K-UP    5
+:const K-LEFT  7
+:const K-DOWN  8
+:const K-RIGHT 9
 
-:const TOP_BOUNDARY 3
-:const LEFT_BOUNDARY 2
-:const BOTTOM_BOUNDARY 28
-:const RIGHT_BOUNDARY 32
+:const TOP-BOUNDARY 3
+:const LEFT-BOUNDARY 2
+:const BOTTOM-BOUNDARY 28
+:const RIGHT-BOUNDARY 32
 
 : dot 0b1000000
 
-: letter_s 0xF0 0x80 0xF0 0x10 0xF0
-: letter_c 0xF0 0x80 0x80 0x80 0xF0
-: letter_o 0xF0 0x90 0x90 0x90 0xF0
-: letter_r 0xF0 0x90 0xF0 0xA0 0x90
-: letter_e 0xF0 0x80 0xF0 0x80 0xF0
-: letter_n 0x90 0xD0 0xB0 0x90 0x90
-: letter_a 0xF0 0x90 0xF0 0x90 0x90
-: letter_k 0x90 0xA0 0xC0 0xA0 0x90
+: letter-s 0xF0 0x80 0xF0 0x10 0xF0
+: letter-c 0xF0 0x80 0x80 0x80 0xF0
+: letter-o 0xF0 0x90 0x90 0x90 0xF0
+: letter-r 0xF0 0x90 0xF0 0xA0 0x90
+: letter-e 0xF0 0x80 0xF0 0x80 0xF0
+: letter-n 0x90 0xD0 0xB0 0x90 0x90
+: letter-a 0xF0 0x90 0xF0 0x90 0x90
+: letter-k 0x90 0xA0 0xC0 0xA0 0x90
 
 : score 0
 
+# Storage place for the BCD encoding of score used for printing to the screen
 : digits 0 0 0
 
-# up, left, down, right
+# key-state represents the up, left, down, and right keys respectively
 # 0 = inactive
 # 1 = just pressed
 # 2 = held down
 : key-state 0 0 0 0
 
+# Print the word 'SCORE' and print the initial score value
 : place-score
 	v0 := 37
 	v1 := 6
-	i  := letter_s
+	i  := letter-s
 	sprite v0 v1 5
 	v0 += 5
-	i  := letter_c
+	i  := letter-c
 	sprite v0 v1 5
 	v0 += 5
-	i  := letter_o
+	i  := letter-o
 	sprite v0 v1 5
 	v0 += 5
-	i  := letter_r
+	i  := letter-r
 	sprite v0 v1 5
 	v0 += 5
-	i  := letter_e
+	i  := letter-e
 	sprite v0 v1 5
 
-	v0 := 0        # some number 0-255
-	i  := digits   # the destination for bcd
-	bcd v0         # unpack digits in v0
+	v0 := 0        # Initial score value
+	i  := digits
+	bcd v0
 
 	v3 := 42       # x position of first digit
 	v4 := 14       # y position of first digit
 	i := digits
-	load v2        # load digits into v0-v2
+	load v2
 
-	i := hex v0    # hundreds digit
+	i := hex v0    # Hundreds digit
 	sprite v3 v4 5
 	v3 += 5
 
-	i := hex v1    # tens digit
+	i := hex v1    # Tens digit
 	sprite v3 v4 5
 	v3 += 5
 
-	i := hex v2    # ones digit
+	i := hex v2    # Ones digit
 	sprite v3 v4 5
 
 	return
 
 : increment-score
-	# erase current score
+	# Erase current score
 	i := score
 	load v0
-	i  := digits   # the destination for bcd
-	bcd v0         # unpack digits in v0
+	i  := digits
+	bcd v0
 
 	v3 := 42       # x position of first digit
 	v4 := 14       # y position of first digit
 	i := digits
-	load v2        # load digits into v0-v2
+	load v2
 
-	i := hex v0    # hundreds digit
+	i := hex v0    # Hundreds digit
 	sprite v3 v4 5
 	v3 += 5
 
-	i := hex v1    # tens digit
+	i := hex v1    # Tens digit
 	sprite v3 v4 5
 	v3 += 5
 
-	i := hex v2    # ones digit
+	i := hex v2    # Ones digit
 	sprite v3 v4 5
 
-	# print new score
+	# Increment score
 	i := score
 	load v0
 	v0 += 1
+
+	# Print new score
 	i := score
 	save v0
-	i  := digits   # the destination for bcd
-	bcd v0         # unpack digits in v0
+	i  := digits
+	bcd v0
 
 	v3 := 42       # x position of first digit
 	v4 := 14       # y position of first digit
 	i := digits
-	load v2        # load digits into v0-v2
+	load v2
 
-	i := hex v0    # hundreds digit
+	i := hex v0    # Hundreds digit
 	sprite v3 v4 5
 	v3 += 5
 
-	i := hex v1    # tens digit
+	i := hex v1    # Tens digit
 	sprite v3 v4 5
 	v3 += 5
 
-	i := hex v2    # ones digit
+	i := hex v2    # Ones digit
 	sprite v3 v4 5
 
 	return
 
+# Place the game boundaries
 : place-walls
 	i := dot
-	v0 := LEFT_BOUNDARY
-	v1 := TOP_BOUNDARY
+	v0 := LEFT-BOUNDARY
+	v1 := TOP-BOUNDARY
 	sprite v0 v1 1
 	loop
 		v0 += 1
 		sprite v0 v1 1
-		if v0 != RIGHT_BOUNDARY then
+		if v0 != RIGHT-BOUNDARY then
 	again
 	loop
 		v1 += 1
 		sprite v0 v1 1
-		if v1 != BOTTOM_BOUNDARY then
+		if v1 != BOTTOM-BOUNDARY then
 	again
 	loop
 		v0 += -1
 		sprite v0 v1 1
-		if v0 != LEFT_BOUNDARY then
+		if v0 != LEFT-BOUNDARY then
 	again
 	loop
 		v1 += -1
 		sprite v0 v1 1
-		if v1 != TOP_BOUNDARY then
+		if v1 != TOP-BOUNDARY then
 	again
 	sprite v0 v1 1
 
 	return
 
+# Set up the snake data structure and place the player on screen
 : place-player
 	head-idx := -1
 	tail-idx := 0
@@ -189,6 +195,7 @@
 		if v1 != 0 then again
 	return
 
+# Place food in a random position within the game boundaries
 : place-food
 	food-x := random 0b11111
 	food-y := random 0b11111
@@ -198,24 +205,25 @@
 		sprite food-x food-y 1
 		jump place-food
 	end
-	if food-x <= LEFT_BOUNDARY begin
+	if food-x <= LEFT-BOUNDARY begin
 		sprite food-x food-y 1
 		jump place-food
 	end
-	if food-x >= RIGHT_BOUNDARY begin
+	if food-x >= RIGHT-BOUNDARY begin
 		sprite food-x food-y 1
 		jump place-food
 	end
-	if food-y <= TOP_BOUNDARY begin
+	if food-y <= TOP-BOUNDARY begin
 		sprite food-x food-y 1
 		jump place-food
 	end
-	if food-y >= BOTTOM_BOUNDARY begin
+	if food-y >= BOTTOM-BOUNDARY begin
 		sprite food-x food-y 1
 		jump place-food
 	end
 	return
 
+# Get direction input from the player
 : get-direction
 	# v0 = up
 	# v1 = left
@@ -225,57 +233,57 @@
 	i := key-state
 	load v3
 
-	# check if key is held or released
+	# Check if key is held or released
 	if v0 == 1 begin
-		v4 := K_UP
+		v4 := K-UP
 		if v4 key begin v0 := 2 else v0 := 0 end
 	end
 	if v1 == 1 begin
-		v4 := K_LEFT
+		v4 := K-LEFT
 		if v4 key begin v1 := 2 else v1 := 0 end
 	end
 	if v2 == 1 begin
-		v4 := K_DOWN
+		v4 := K-DOWN
 		if v4 key begin v2 := 2 else v2 := 0 end
 	end
 	if v3 == 1 begin
-		v4 := K_RIGHT
+		v4 := K-RIGHT
 		if v4 key begin v3 := 2 else v3 := 0 end
 	end
 	
-	# check for key press
+	# Check for key press
 	if v0 == 0 begin
-		v4 := K_UP
+		v4 := K-UP
 		if v4 key then v0 := 1
 	end
 	if v1 == 0 begin
-		v4 := K_LEFT
+		v4 := K-LEFT
 		if v4 key then v1 := 1
 	end
 	if v2 == 0 begin
-		v4 := K_DOWN
+		v4 := K-DOWN
 		if v4 key then v2 := 1
 	end
 	if v3 == 0 begin
-		v4 := K_RIGHT
+		v4 := K-RIGHT
 		if v4 key then v3 := 1
 	end
 
-	# check for key release
+	# Check for key release
 	if v0 == 2 begin
-		v4 := K_UP
+		v4 := K-UP
 		if v4 -key then v0 := 0
 	end
 	if v1 == 2 begin
-		v4 := K_LEFT
+		v4 := K-LEFT
 		if v4 -key then v1 := 0
 	end
 	if v2 == 2 begin
-		v4 := K_DOWN
+		v4 := K-DOWN
 		if v4 -key then v2 := 0
 	end
 	if v3 == 2 begin
-		v4 := K_RIGHT
+		v4 := K-RIGHT
 		if v4 -key then v3 := 0
 	end
 
@@ -324,6 +332,7 @@
 	end
 	return
 
+# Update the player and check for collisions
 : move-player
 	# Move head
 	if direction == UP then head-y += -1
@@ -334,7 +343,7 @@
 	sprite head-x head-y 1
 	v2 := vf # check for collision
 
-	# update body data
+	# Update snake data
 	v0 := direction
 	i := snake-body
 	i += head-idx
@@ -343,7 +352,7 @@
 	if head-idx == 255 then head-idx := 0
 
 	# Move tail
-	if v2 == 0 begin # head did not collide with something, so erase tail
+	if v2 == 0 begin # Head did not collide with anything, so erase the tail
 		i := dot
 		sprite tail-x tail-y 1
 		i := snake-body
@@ -355,7 +364,7 @@
 		if v0 == LEFT then tail-x += -1
 		if v0 == DOWN then tail-y += 1
 		if v0 == RIGHT then tail-x += 1
-	else # head did collide with something
+	else # Head did collide with something
 		v1 := head-x
 		v0 := 0b111111
 		v1 &= v0
@@ -363,7 +372,7 @@
 			v1 := head-y
 			v0 := 0b11111
 			v1 &= v0
-			if v1 == food-y begin # collided with food
+			if v1 == food-y begin # Head collided with food
 				i := dot
 				sprite head-x head-y 1
 				place-food
@@ -378,6 +387,7 @@
 
 	return
 
+# Freeze the game and wait for player reset
 : game-over
 	is-game-over := 1
 	loop
@@ -387,22 +397,23 @@
 	clear
 	return
 
+# Print the word 'SNAKE' and wait for player start
 : start-screen
 	v0 := 20
 	v1 := 6
-	i  := letter_s
+	i  := letter-s
 	sprite v0 v1 5
 	v0 += 5
-	i  := letter_n
+	i  := letter-n
 	sprite v0 v1 5
 	v0 += 5
-	i  := letter_a
+	i  := letter-a
 	sprite v0 v1 5
 	v0 += 5
-	i  := letter_k
+	i  := letter-k
 	sprite v0 v1 5
 	v0 += 5
-	i  := letter_e
+	i  := letter-e
 	sprite v0 v1 5
 
 	loop
@@ -412,7 +423,8 @@
 	clear
 	return
 
-: setup-game
+# Initialize the game data and print starting posistion to screen
+: set-up-game
 	is-game-over := 0
 	v0 := 0
 	i := score
@@ -429,16 +441,17 @@
 	place-food
 	return
 
+# Main game loop
 : play-game
-	setup-game
+	set-up-game
 	loop
 		loop
 
-		# time sync
+		# Time sync
 		vf := delay
 		if vf != 0 then again
 
-		# set clock speed
+		# Set clock speed
 		vf := 3
 		delay := vf
 
@@ -470,3 +483,5 @@
 	0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
 	0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
 : end-snake-body
+
+
