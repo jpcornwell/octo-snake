@@ -173,26 +173,31 @@
 
 # Set up the snake data structure and place the player on screen
 : place-player
-	head-idx := -1
+	# This assumes you start with a snake of length 3
+	# Set up snake data
+	head-idx := 2
 	tail-idx := 0
-	head-x := 6
+	head-x := 9
 	head-y := 15
 	tail-x := 7
 	tail-y := 15
+	i := snake-body
+	v0 := RIGHT
+	save v0
+	save v0
+	save v0
 	direction := RIGHT
 
-	v1 := 3
+	# Print snake to screen
+	v0 := tail-x
+	v1 := tail-y
+	v2 := 3
 	loop
-		head-x += 1
 		i := dot
-		sprite head-x head-y 1
-		i := snake-body
-		i += head-idx
-		v0 := RIGHT
-		save v0
-		head-idx += 1
-		v1 += -1
-		if v1 != 0 then again
+		sprite v0 v1 1
+		v0 += 1
+		v2 += -1
+		if v2 != 0 then again
 	return
 
 # Place food in a random position within the game boundaries
