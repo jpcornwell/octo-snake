@@ -374,24 +374,21 @@
 		if v0 == DOWN then tail-y += 1
 		if v0 == RIGHT then tail-x += 1
 	else # Head did collide with something
-		v1 := head-x
-		v0 := 0b111111
-		v1 &= v0
-		if v1 == food-x begin
-			v1 := head-y
-			v0 := 0b11111
-			v1 &= v0
+		v0 := head-x
+		v1 := head-y
+		v2 := 0 # Represents if player collided with food
+
+		if v0 == food-x begin
 			if v1 == food-y begin # Head collided with food
 				i := dot
 				sprite head-x head-y 1
 				place-food
 				increment-score
-			else
-				game-over
+				v2 := 1
 			end
-		else
-			game-over
 		end
+
+		if v2 == 0 then game-over
 	end
 
 	return
